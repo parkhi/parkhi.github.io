@@ -4,9 +4,3 @@ theme: jekyll-theme-cayman
 # Put links in the description so they show in the left sidebar
 description: >-
   Engineering Portfolio — C++ Systems, Backend Development & API Design
-  
-  <a href="https://www.linkedin.com/in/parkhi-rastogi/">View My LinkedIn Profile</a>
-
-  
-github:
-  is_project_page: false
