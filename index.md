@@ -16,5 +16,3 @@ This site collects write-ups of projects I’ve worked on and the design choices
   *(write-up coming soon)*
 
 ---
-
-[GitHub](https://github.com/parkhi) · [LinkedIn](https://www.linkedin.com/in/parkhi-rastogi/)
