@@ -3,9 +3,9 @@ theme: jekyll-theme-minimal
 
 # Put links in the description so they show in the left sidebar
 description: >-
-  Engineering Portfolio — C++ Systems, Backend Development & API Design  
-  <a href="https://github.com/parkhi">GitHub</a> ·
-  <a href="https://www.linkedin.com/in/parkhi-rastogi/">LinkedIn</a>
+  Engineering Portfolio — C++ Systems, Backend Development & API Design
+  
+  <a href="https://www.linkedin.com/in/parkhi-rastogi/">View My LinkedIn Profile</a>
 
   
 github:
