@@ -1,6 +1,6 @@
 # Engineering Portfolio
 
-I work on backend systems with C/C++ and Python, building reliable data pipelines using PostgreSQL, Redis, and FastAPI.  
+I work on backend systems with C/C++ and Python, building reliable data pipelines using PostgreSQL, Redis, FastAPI and more.  
 This site collects write-ups of projects I’ve worked on and the design choices behind them.
 
 ## Case Studies
