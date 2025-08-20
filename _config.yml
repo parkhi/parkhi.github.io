@@ -1,5 +1,8 @@
 title: [Parkhi Rastogi]
 theme: jekyll-theme-cayman
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+- jekyll-remote-theme # add this line to the plugins list if you already have one
 
 # Put links in the description so they show in the left sidebar
 description: [Engineering Portfolio — C++ Systems, Backend Development & API Design]
