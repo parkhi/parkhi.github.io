@@ -1,14 +1,8 @@
 title: "Parkhi Rastogi"
-description: "Engineering Portfolio — C++ Systems, Backend Development & API Design"
 theme: jekyll-theme-minimal
 
-# Sidebar author block
-author:
-  name: Parkhi Rastogi
-  links:
-    - label: "GitHub"
-      icon: "fab fa-github"
-      url: "https://github.com/parkhi"
-    - label: "LinkedIn"
-      icon: "fab fa-linkedin"
-      url: "https://www.linkedin.com/in/parkhi/"
+# Put links in the description so they show in the left sidebar
+description: >-
+  Engineering Portfolio — C++ Systems, Backend Development & API Design  
+  <a href="https://github.com/parkhi">GitHub</a> ·
+  <a href="https://www.linkedin.com/in/parkhi/">LinkedIn</a>
