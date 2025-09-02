@@ -36,6 +36,7 @@ The design ended up as a layered flow:
   - Some **background workers** that ran daily, pulled data in bulk, normalized it, and saved into both Postgres and Redis with different TTLs.  
   - Some **on-demand fetchers** that only ran when Redis or Postgres didn’t have the data. They fetched fresh data, normalized it, and immediately updated Redis/Postgres before returning the result.  
 
+<br>
 - **Normalizer**  
   This was the translator of the system. Since every API returned data in slightly different shapes, I used Pydantic models to validate and reshape everything into a consistent schema. This prevented errors and made downstream querying predictable.  
 
@@ -52,7 +53,7 @@ The design ended up as a layered flow:
   - `/logs/export` → admin-only endpoint to download structured logs.  
   FastAPI’s input validation caught invalid parameters (like wrong `days` values) before they hit the backend logic.
 
-
+<br>
 - **Authentication & Access Control**  
   Security was handled with API keys and JWT:  
   - **Private API key** for normal requests.  
@@ -61,7 +62,6 @@ The design ended up as a layered flow:
   The client didn’t want to share his private key with me during testing, so I built and tested the entire flow using public keys and Postman. This allowed me to validate auth, caching, and endpoint behavior without exposing secrets.  
 
 <br>
-
 - **Rate Limiting**  
   I used a fixed-window limiter in Redis: for each API key, keep a counter keyed like `rate:<api_key>:<endpoint>:<unix_window>`. On each request, `INCR` the counter; if it’s the first hit in the window, set `EXPIRE` to the window size. If the count exceeded the configured max requests per window for that key/endpoint, return **429 Too Many Requests** until the window rolled over. Limits (window size, max requests) were configurable per provider and per key tier.  
 
