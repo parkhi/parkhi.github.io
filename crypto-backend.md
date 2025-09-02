@@ -1,3 +1,5 @@
+# Crypto Data Backend — FastAPI · Redis · PostgreSQL
+
 I built a backend service to fetch, normalize, and serve cryptocurrency market data.  
 The system had to integrate with multiple external providers, cache responses, store history, and remain secure under rate limits.
 
