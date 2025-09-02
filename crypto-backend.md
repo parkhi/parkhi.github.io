@@ -61,6 +61,7 @@ The design ended up as a layered flow:
   The client didn’t want to share his private key with me during testing, so I built and tested the entire flow using public keys and Postman. This allowed me to validate auth, caching, and endpoint behavior without exposing secrets.  
 
 
+
 - **Rate Limiting**  
   I used a fixed-window limiter in Redis: for each API key, keep a counter keyed like `rate:<api_key>:<endpoint>:<unix_window>`. On each request, `INCR` the counter; if it’s the first hit in the window, set `EXPIRE` to the window size. If the count exceeded the configured max requests per window for that key/endpoint, return **429 Too Many Requests** until the window rolled over. Limits (window size, max requests) were configurable per provider and per key tier.  
 
