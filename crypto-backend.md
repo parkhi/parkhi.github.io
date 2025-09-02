@@ -35,7 +35,6 @@ The design ended up as a layered flow:
   I had two paths for bringing in data:  
   - Some **background workers** that ran daily, pulled data in bulk, normalized it, and saved into both Postgres and Redis with different TTLs.  
   - Some **on-demand fetchers** that only ran when Redis or Postgres didn’t have the data. They fetched fresh data, normalized it, and immediately updated Redis/Postgres before returning the result.  
-
 <br>
 - **Normalizer**  
   This was the translator of the system. Since every API returned data in slightly different shapes, I used Pydantic models to validate and reshape everything into a consistent schema. This prevented errors and made downstream querying predictable.  
