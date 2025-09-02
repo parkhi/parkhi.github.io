@@ -51,7 +51,6 @@ The design ended up as a layered flow:
   - `/market_chart` → fetch historical time-series data.  
   - `/logs/export` → admin-only endpoint to download structured logs.  
   FastAPI’s input validation caught invalid parameters (like wrong `days` values) before they hit the backend logic.
-
 <br>
 - **Authentication & Access Control**  
   Security was handled with API keys and JWT:  
@@ -59,7 +58,6 @@ The design ended up as a layered flow:
   - **Admin key** for privileged routes (like log export).  
   - I also added **JWT auth** at the FastAPI layer for role-based access control (future-ready).  
   The client didn’t want to share his private key with me during testing, so I built and tested the entire flow using public keys and Postman. This allowed me to validate auth, caching, and endpoint behavior without exposing secrets.  
-
 <br>
 - **Rate Limiting**  
   I used a fixed-window limiter in Redis: for each API key, keep a counter keyed like `rate:<api_key>:<endpoint>:<unix_window>`. On each request, `INCR` the counter; if it’s the first hit in the window, set `EXPIRE` to the window size. If the count exceeded the configured max requests per window for that key/endpoint, return **429 Too Many Requests** until the window rolled over. Limits (window size, max requests) were configurable per provider and per key tier.  
@@ -95,13 +93,13 @@ The design ended up as a layered flow:
   - `interval`: only `daily` or `hourly`  
   - `currency`: checked against a whitelist of supported symbols  
   Invalid requests were rejected upfront with **400 Bad Request**, preventing wasted API calls and cache pollution.  
-
+<br>
 - **Redis Keys & Policy**  
   Keys were structured by dataset:  
   - Simple price → `price:<asset>:<currency>:latest`  
   - Market chart → `chart:<asset>:<currency>:<interval>:<days>`  
   Each key carried its own TTL: **short for simple price** (to feel real-time) and **longer for chart data** (since daily/hourly series don’t change as often). On cache miss, the system fetched fresh data, normalized it, updated Redis, and returned the result immediately.  
-
+<br>
 - **Error Handling & Retries**  
   - **Transient upstream failures** → retried with **exponential backoff** (short delay → longer delay → capped at a max).  
   - **Persistent failures** → after retries were exhausted, returned a clear **5xx** error instead of partial/stale data.  
@@ -111,24 +109,24 @@ The design ended up as a layered flow:
   - **Rate limit exceeded** → 429.  
   - **Unhandled errors** → 500.  
   These clear codes made failure modes predictable and easy to debug.  
-
+<br>
 - **Rate Limiting**  
   A fixed-window counter in Redis tracked usage: `rate:<api_key>:<endpoint>:<window>`. Each request incremented the counter; if it exceeded the configured max per window, the system returned **429 Too Many Requests** until the window reset. Limits were configurable per provider and key tier.  
-
+<br>
 - **Configuration & Environments**  
   All sensitive and changeable values came from environment variables:  
   - **Dev** → public keys, shorter TTLs, relaxed limits for rapid iteration.  
   - **Prod** → real keys injected via secret manager, stricter TTLs, and provider-specific quotas.  
   This allowed me to safely simulate production behavior locally with Postman.  
-
+<br>
 - **Log Export**  
   All worker actions and API requests were logged in structured JSON with timestamps and context. Admins could download compressed/rotated logs via `/logs/export`, making audits and debugging easier.  
-
+<br>
 - **Documentation & Developer Experience**  
   - FastAPI auto-generated **Swagger UI** at `/docs` and **ReDoc** at `/redoc`.  
   - A separate **technical document** detailed architecture, parameter rules, and error codes.  
   - A **Postman collection** with public dev keys was provided for quick testing.  
-
+<br>
 - **Testing & Tooling**  
   - **Unit tests** with pytest validated schema rules, normalization logic, and error handling.  
   - **Integration tests** spun up Redis + Postgres using Docker Compose for end-to-end runs.  
