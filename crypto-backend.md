@@ -50,7 +50,8 @@ The design ended up as a layered flow:
   - `/simple_price` → fetch latest price(s).  
   - `/market_chart` → fetch historical time-series data.  
   - `/logs/export` → admin-only endpoint to download structured logs.  
-  FastAPI’s input validation caught invalid parameters (like wrong `days` values) before they hit the backend logic.  
+  FastAPI’s input validation caught invalid parameters (like wrong `days` values) before they hit the backend logic.
+
 
 - **Authentication & Access Control**  
   Security was handled with API keys and JWT:  
@@ -59,8 +60,10 @@ The design ended up as a layered flow:
   - I also added **JWT auth** at the FastAPI layer for role-based access control (future-ready).  
   The client didn’t want to share his private key with me during testing, so I built and tested the entire flow using public keys and Postman. This allowed me to validate auth, caching, and endpoint behavior without exposing secrets.  
 
+
 - **Rate Limiting**  
   I used a fixed-window limiter in Redis: for each API key, keep a counter keyed like `rate:<api_key>:<endpoint>:<unix_window>`. On each request, `INCR` the counter; if it’s the first hit in the window, set `EXPIRE` to the window size. If the count exceeded the configured max requests per window for that key/endpoint, return **429 Too Many Requests** until the window rolled over. Limits (window size, max requests) were configurable per provider and per key tier.  
+
 
 - **Configuration & Environments**  
   All sensitive or changeable values were pulled from environment variables, so I could run the system safely in different contexts.  
@@ -68,9 +71,11 @@ The design ended up as a layered flow:
   - In **prod**, the client supplied real keys via environment/secret manager, with stricter TTLs and provider-specific rate limits.  
   This separation made it easy to mimic production behavior locally. For example, I could spin up Postman with my public dev keys, send calls through the endpoints, and watch how caching and rate limits behaved — knowing that the same logic would run in production with just different values.  
 
+
 - **Documentation & Developer Experience**  
   I leaned on FastAPI’s auto-generated Swagger UI at `/docs` for interactive exploration of the API.  
   In addition, I created a separate full technical document (outside the codebase) that explained the architecture, parameter rules, error codes, and expected flows. This was meant for client support and made onboarding much easier.  
+
 
 - **Consumers**  
   The final users of this system were:  
